@@ -1,0 +1,23 @@
+{
+  "name": "@keycloak/{{artifactId}}",
+  "version": "1.0.0-SNAPSHOT",
+  "private": true,
+  "type": "module",
+  "description": "{{description}}",
+  "scripts": {
+    "build": "esbuild src/main.js --bundle --outfile=src/main/resources/theme/{{themeName}}/login/resources/js/main.js --format=esm --minify",
+    "dev": "esbuild src/main.js --bundle --outfile=src/main/resources/theme/{{themeName}}/login/resources/js/main.js --format=esm --watch --sourcemap",
+    "start-keycloak": "node scripts/start-keycloak.mjs"
+  },
+  "dependencies": {
+    "@edewit/login-ui-base": "^1.0.0",
+    "alpinejs": "^3.14.3"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0",
+    "keycloak-runner": "0.0.1-alpha.3"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

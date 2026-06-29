@@ -1,0 +1,13 @@
+{#include template}
+<div id="kc-recovery-codes-input">
+    <h1 id="kc-page-title">{msg.format('auth-recovery-code-header')}</h1>
+    {#include alert /}
+
+    <form action="{url.loginAction}" method="post">
+        {#include form-field name='recoveryCodeInput' id='recoveryCodeInput' type='text' label=msg.format('auth-recovery-code-prompt') hasError=hasRecoveryCodeInputError error=recoveryCodeInputFieldError autofocus=true autocomplete='off' /}
+        {#include form-buttons}
+            {#include submit-button name='login' value=msg.format('doLogIn') /}
+        {/include}
+    </form>
+</div>
+{/include}

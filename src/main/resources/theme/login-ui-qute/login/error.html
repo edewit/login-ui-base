@@ -1,0 +1,17 @@
+{#include template}
+<div id="kc-error-message">
+    <h1 id="kc-page-title">{msg.format('errorTitle')}</h1>
+
+    {#if hasMessageSummary}
+    <p class="mb-4 text-gray-600 dark:text-gray-300">{messageSummary}</p>
+    {/if}
+
+    {#if hasTraceId}
+    <p class="mb-4 text-gray-600 dark:text-gray-300" id="traceId">{msg.format('traceIdSupportMessage', traceId)}</p>
+    {/if}
+
+    {#if showBackLink}
+    <p><a id="backToApplication" href="{clientBaseUrl}">{msg.format('backToApplication')}</a></p>
+    {/if}
+</div>
+{/include}

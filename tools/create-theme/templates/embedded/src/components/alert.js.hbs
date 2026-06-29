@@ -1,0 +1,29 @@
+export function alertComponent() {
+  return {
+    get ctx() {
+      return this.$store.ctx;
+    },
+
+    get alertClass() {
+      const type = this.ctx.message?.type || "info";
+      const classMap = {
+        success: "pf-m-success",
+        warning: "pf-m-warning",
+        error: "pf-m-danger",
+        info: "pf-m-info",
+      };
+      return classMap[type] || "pf-m-info";
+    },
+
+    get iconClass() {
+      const type = this.ctx.message?.type || "info";
+      const iconMap = {
+        success: "fas fa-check-circle",
+        warning: "fas fa-exclamation-triangle",
+        error: "fas fa-exclamation-circle",
+        info: "fas fa-info-circle",
+      };
+      return iconMap[type] || "fas fa-info-circle";
+    },
+  };
+}

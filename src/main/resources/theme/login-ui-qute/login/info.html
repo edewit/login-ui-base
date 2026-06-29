@@ -1,0 +1,17 @@
+{#include template}
+<div id="kc-info-message">
+    <h1 id="kc-page-title">{#if hasMessageSummary}{messageSummary}{#else}{msg.format('infoTitle')}{/if}</h1>
+
+    {#if hasMessageSummary}
+    <p class="mb-4 text-gray-600 dark:text-gray-300">{messageSummary}</p>
+    {/if}
+
+    {#if showInfoRedirectLink}
+    <p><a href="{pageRedirectUri}">{msg.format('backToApplication')}</a></p>
+    {#else if showInfoActionLink}
+    <p><a href="{actionUri}">{msg.format('proceedWithAction')}</a></p>
+    {#else if showBackLink}
+    <p><a href="{clientBaseUrl}">{msg.format('backToApplication')}</a></p>
+    {/if}
+</div>
+{/include}

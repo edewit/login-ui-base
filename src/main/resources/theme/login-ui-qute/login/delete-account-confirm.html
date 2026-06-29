@@ -1,0 +1,18 @@
+{#include template}
+<div id="kc-delete-account">
+    <h1 id="kc-page-title">{msg.format('deleteAccountConfirm')}</h1>
+    {#include alert /}
+
+    <p>{msg.format('deletingImplies')}</p>
+    <ul>
+        <li>{msg.format('loggingOutImmediately')}</li>
+        <li>{msg.format('errasingData')}</li>
+    </ul>
+    <p>{msg.format('finalDeletionConfirmation')}</p>
+
+    <form action="{url.loginAction}" method="post">
+        <input type="submit" value="{msg.format('doConfirmDelete')}" />
+        <button type="submit" name="cancel-aia" value="true">{msg.format('doCancel')}</button>
+    </form>
+</div>
+{/include}

@@ -1,0 +1,16 @@
+{#include template}
+<div id="kc-update-email">
+    <h1 id="kc-page-title">{msg.format('updateEmailTitle')}</h1>
+    {#include alert /}
+
+    <form action="{url.loginAction}" method="post">
+        {#include profile-fields /}
+        {#include form-buttons}
+            {#include submit-button value=msg.format('doSubmit') /}
+            {#if isAppInitiatedAction}
+            {#include cancel-aia-button /}
+            {/if}
+        {/include}
+    </form>
+</div>
+{/include}

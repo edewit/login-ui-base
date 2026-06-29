@@ -1,0 +1,3 @@
+@import "tailwindcss";
+@source "../resources/theme/login-ui-qute/login/**/*.html";
+@custom-variant dark (&:where(.dark, .dark *));

@@ -1,0 +1,149 @@
+<div class="pf-v5-c-login" x-data="loginPage" x-init="init()">
+  <div class="pf-v5-c-login__container">
+    <main class="pf-v5-c-login__main">
+      <header class="pf-v5-c-login__main-header">
+        <h1 class="pf-v5-c-title pf-m-3xl" x-text="$msg('loginAccountTitle')"></h1>
+      </header>
+      
+      <div class="pf-v5-c-login__main-body">
+        <template x-if="ctx.message && ctx.message.summary && !usernameError && !passwordError">
+          <div x-data="kcAlert">
+            <div 
+              class="pf-v5-c-alert pf-m-inline"
+              :class="alertClass"
+            >
+              <div class="pf-v5-c-alert__icon">
+                <i :class="iconClass"></i>
+              </div>
+              <p class="pf-v5-c-alert__title" x-html="ctx.message.summary"></p>
+            </div>
+          </div>
+        </template>
+        
+        <template x-if="ctx.realm.password">
+          <form class="pf-v5-c-form" :action="ctx.url.loginAction" method="post">
+            <template x-if="!ctx.usernameHidden">
+              <div class="pf-v5-c-form__group">
+                <div class="pf-v5-c-form__group-label">
+                  <label class="pf-v5-c-form__label" for="username">
+                    <span class="pf-v5-c-form__label-text" x-text="usernameLabel"></span>
+                    <span class="pf-v5-c-form__label-required" aria-hidden="true">*</span>
+                  </label>
+                </div>
+                <div class="pf-v5-c-form__group-control">
+                  <input
+                    class="pf-v5-c-form-control"
+                    :class="{ 'pf-m-error': usernameError || passwordError }"
+                    type="text"
+                    id="username"
+                    name="username"
+                    :value="ctx.login?.username || ''"
+                    autocomplete="username"
+                    autofocus
+                    required
+                  />
+                  <template x-if="usernameError">
+                    <div class="pf-v5-c-form__helper-text pf-m-error">
+                      <span x-text="usernameError"></span>
+                    </div>
+                  </template>
+                </div>
+              </div>
+            </template>
+            
+            <div class="pf-v5-c-form__group" x-data="kcPasswordField">
+              <div class="pf-v5-c-form__group-label">
+                <label class="pf-v5-c-form__label" for="password">
+                  <span class="pf-v5-c-form__label-text" x-text="$msg('password')"></span>
+                  <span class="pf-v5-c-form__label-required" aria-hidden="true">*</span>
+                </label>
+              </div>
+              <div class="pf-v5-c-form__group-control">
+                <div class="pf-v5-c-input-group">
+                  <div class="pf-v5-c-input-group__item pf-m-fill">
+                    <input
+                      class="pf-v5-c-form-control"
+                      :class="{ 'pf-m-error': ctx.usernameHidden && passwordError }"
+                      :type="inputType"
+                      id="password"
+                      name="password"
+                      autocomplete="current-password"
+                      :autofocus="ctx.usernameHidden"
+                      required
+                    />
+                  </div>
+                  <div class="pf-v5-c-input-group__item">
+                    <button
+                      type="button"
+                      class="pf-v5-c-button pf-m-control"
+                      @click="toggle"
+                    >
+                      <i :class="toggleIcon"></i>
+                    </button>
+                  </div>
+                </div>
+                <template x-if="ctx.usernameHidden && passwordError">
+                  <div class="pf-v5-c-form__helper-text pf-m-error">
+                    <span x-text="passwordError"></span>
+                  </div>
+                </template>
+                <template x-if="ctx.realm.resetPasswordAllowed">
+                  <div class="pf-v5-c-form__helper-text">
+                    <a :href="ctx.url.loginResetCredentialsUrl" x-text="$msg('doForgotPassword')"></a>
+                  </div>
+                </template>
+              </div>
+            </div>
+            
+            <template x-if="ctx.realm.rememberMe && !ctx.usernameHidden">
+              <div class="pf-v5-c-form__group">
+                <div class="pf-v5-c-check">
+                  <input
+                    class="pf-v5-c-check__input"
+                    type="checkbox"
+                    id="rememberMe"
+                    name="rememberMe"
+                    :checked="ctx.login?.rememberMe === 'on'"
+                  />
+                  <label class="pf-v5-c-check__label" for="rememberMe" x-text="$msg('rememberMe')"></label>
+                </div>
+              </div>
+            </template>
+            
+            <input type="hidden" name="credentialId" :value="ctx.auth?.selectedCredential || ''" />
+            
+            <div class="pf-v5-c-form__group pf-m-action">
+              <button class="pf-v5-c-button pf-m-primary pf-m-block" type="submit" x-text="$msg('doLogIn')"></button>
+            </div>
+          </form>
+        </template>
+        
+        <template x-if="showSocialProviders">
+          <div class="kc-social-providers">
+            <hr class="pf-v5-c-divider" />
+            <ul class="pf-v5-c-list pf-m-plain">
+              <template x-for="provider in ctx.social.providers" :key="provider.alias">
+                <li>
+                  <a :href="provider.loginUrl" class="pf-v5-c-button pf-m-secondary pf-m-block">
+                    <span x-text="provider.displayName"></span>
+                  </a>
+                </li>
+              </template>
+            </ul>
+          </div>
+        </template>
+      </div>
+      
+      <footer class="pf-v5-c-login__main-footer">
+        <template x-if="showRegisterLink">
+          <div class="pf-v5-c-login__main-footer-band">
+            <p class="pf-v5-c-login__main-footer-band-item">
+              <span x-text="$msg('noAccount')"></span>
+              <a :href="ctx.url.registrationUrl" x-text="$msg('doRegister')"></a>
+            </p>
+          </div>
+        </template>
+      </footer>
+    </main>
+  </div>
+</div>

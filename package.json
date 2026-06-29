@@ -1,0 +1,42 @@
+{
+  "name": "@edewit/login-ui-base",
+  "version": "1.0.0",
+  "description": "Base theme for Keycloak login pages with client-side UI and optional Quarkus Qute server-side rendering.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "README.md",
+    "lib/resolve-jar.mjs",
+    "target/login-ui-base.jar",
+    "tools/create-theme",
+    "src/main/resources/theme/login-ui-qute/login/login.html"
+  ],
+  "exports": {
+    "./jar": "./target/login-ui-base.jar",
+    "./resolve-jar": "./lib/resolve-jar.mjs"
+  },
+  "bin": {
+    "create-login-theme": "./tools/create-theme/cli.mjs"
+  },
+  "scripts": {
+    "create-theme": "node tools/create-theme/cli.mjs",
+    "start-keycloak": "node scripts/start-keycloak.mjs",
+    "prepare-npm": "node scripts/prepare-npm-artifacts.mjs",
+    "prepublishOnly": "mvn -q clean package && node scripts/prepare-npm-artifacts.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^7.5.3",
+    "commander": "^14.0.3",
+    "keycloak-runner": "0.0.1-alpha.3"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.0",
+    "tailwindcss": "^4.1.0"
+  }
+}

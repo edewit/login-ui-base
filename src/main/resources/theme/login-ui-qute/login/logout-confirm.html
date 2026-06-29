@@ -1,0 +1,17 @@
+{#include template}
+<div id="kc-logout-confirm">
+    <h1 id="kc-page-title">{msg.format('logoutConfirmTitle')}</h1>
+    {#include alert /}
+
+    <p class="mb-4 text-gray-600 dark:text-gray-300">{msg.format('logoutConfirmHeader')}</p>
+
+    <form action="{url.logoutConfirmAction}" method="post">
+        <input type="hidden" name="session_code" value="{logoutConfirmCode}" />
+        <input name="confirmLogout" type="submit" value="{msg.format('doLogout')}" />
+    </form>
+
+    {#if showBackLink}
+    <p><a href="{clientBaseUrl}">{msg.format('backToApplication')}</a></p>
+    {/if}
+</div>
+{/include}

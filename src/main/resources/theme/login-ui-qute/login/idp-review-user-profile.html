@@ -1,0 +1,13 @@
+{#include template}
+<div id="kc-idp-review-profile">
+    <h1 id="kc-page-title">{msg.format('loginIdpReviewProfileTitle')}</h1>
+    {#include alert /}
+
+    <form action="{url.loginAction}" method="post">
+        {#include profile-fields /}
+        {#include form-buttons}
+            {#include submit-button value=msg.format('doSubmit') /}
+        {/include}
+    </form>
+</div>
+{/include}

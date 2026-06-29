@@ -1,0 +1,11 @@
+{#if showSocialProviders}
+<div id="kc-social-providers" class="mt-6">
+    <hr class="border-0 border-t border-gray-300 dark:border-gray-600 my-6" />
+    <h2 class="text-lg font-semibold mb-4">{msg.format('identity-provider-login-label')}</h2>
+    <ul class="flex flex-col gap-2 list-none p-0 m-0">
+        {#for provider in socialProviderList}
+        {#include social-provider provider=provider /}
+        {/for}
+    </ul>
+</div>
+{/if}

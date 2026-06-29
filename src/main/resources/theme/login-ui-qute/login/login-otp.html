@@ -1,0 +1,13 @@
+{#include template}
+<div id="kc-otp-login-form">
+    <h1 id="kc-page-title">{msg.format('doLogIn')}</h1>
+    {#include alert /}
+
+    <form action="{url.loginAction}" method="post">
+        {#include form-field name='otp' id='otp' type='text' label=msg.format('loginOtpOneTime') hasError=hasTotpError error=totpFieldError autofocus=true autocomplete='one-time-code' /}
+        {#include form-buttons}
+            {#include submit-button name='login' value=msg.format('doLogIn') /}
+        {/include}
+    </form>
+</div>
+{/include}

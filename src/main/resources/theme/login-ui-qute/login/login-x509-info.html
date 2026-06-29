@@ -1,0 +1,17 @@
+{#include template}
+<div id="kc-x509-info">
+    <h1 id="kc-page-title">{msg.format('doLogIn')}</h1>
+    {#include alert /}
+
+    <form action="{url.loginAction}" method="post">
+        <p><strong>{msg.format('clientCertificate')}</strong></p>
+        <p>{#if x509SubjectDn != ''}{x509SubjectDn}{#else}{msg.format('noCertificate')}{/if}</p>
+
+        {#include form-field name='username' id='username' type='text' label=msg.format('username') value=x509Username hasError=hasUsernameError error=usernameFieldError autocomplete='username' /}
+
+        {#include form-buttons}
+            {#include submit-button value=msg.format('doContinue') /}
+        {/include}
+    </form>
+</div>
+{/include}

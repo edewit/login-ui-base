@@ -1,0 +1,12 @@
+target/
+*.class
+*.jar
+*.log
+.idea/
+*.iml
+.project
+.classpath
+node_modules/
+/.factorypath
+/.settings
+/.vscode

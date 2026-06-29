@@ -1,0 +1,15 @@
+{#include template}
+<div id="kc-register-form">
+    <h1 id="kc-page-title">{msg.format('registerTitle')}</h1>
+    {#include alert /}
+
+    <form id="kc-register-form-inner" action="{url.registrationAction}" method="post">
+        {#include profile-fields /}
+        {#include form-buttons}
+            {#include submit-button value=msg.format('doRegister') /}
+        {/include}
+    </form>
+
+    <p><a href="{url.loginUrl}">{msg.format('backToLogin')}</a></p>
+</div>
+{/include}

@@ -1,0 +1,24 @@
+{#include template}
+<div id="kc-saml-post-form">
+    <h1 id="kc-page-title">{msg.format('saml.post-form.title')}</h1>
+
+    <script>window.onload = function() { document.forms[0].submit(); };</script>
+    <p>{msg.format('saml.post-form.message')}</p>
+
+    <form method="post" action="{samlPostUrl}">
+        {#if hasSamlRequest}
+        <input type="hidden" name="SAMLRequest" value="{samlRequest}" />
+        {/if}
+        {#if hasSamlResponse}
+        <input type="hidden" name="SAMLResponse" value="{samlResponse}" />
+        {/if}
+        {#if hasSamlRelayState}
+        <input type="hidden" name="RelayState" value="{samlRelayState}" />
+        {/if}
+        <noscript>
+            <p>{msg.format('saml.post-form.js-disabled')}</p>
+            <input type="submit" value="{msg.format('doContinue')}" />
+        </noscript>
+    </form>
+</div>
+{/include}

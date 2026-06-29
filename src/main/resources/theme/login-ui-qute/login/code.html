@@ -1,0 +1,12 @@
+{#include template}
+<div id="kc-code">
+    {#if codeSuccess}
+    <h1 id="kc-page-title">{msg.format('codeSuccessTitle')}</h1>
+    <p>{msg.format('copyCodeInstruction')}</p>
+    <input id="code" readonly value="{codeValue}" />
+    {#else}
+    <h1 id="kc-page-title">{msg.format('codeErrorTitle', codeError)}</h1>
+    <p id="error">{codeError}</p>
+    {/if}
+</div>
+{/include}

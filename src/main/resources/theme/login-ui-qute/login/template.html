@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html class="{propertiesMap.kcHtmlClass}" lang="{lang}">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="light{#if darkMode} dark{/if}">
+    <meta name="robots" content="noindex, nofollow">
+    <title>{msg.format('loginTitle', realmDisplayName)}</title>
+    <link rel="icon" href="{url.resourcesPath}/img/favicon.ico" />
+
+    {#for style in styles}
+        <link href="{url.resourcesPath}/{style}" rel="stylesheet" />
+    {/for}
+
+    {#if darkMode}
+    <script type="module" async blocking="render">
+        const DARK_MODE_CLASS = "{#if propertiesMap.kcDarkModeClass}{propertiesMap.kcDarkModeClass}{#else}dark{/if}";
+        const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+        updateDarkMode(mediaQuery.matches);
+        mediaQuery.addEventListener("change", (event) => updateDarkMode(event.matches));
+        function updateDarkMode(isEnabled) {
+            const { classList } = document.documentElement;
+            if (isEnabled) {
+                classList.add(DARK_MODE_CLASS);
+            } else {
+                classList.remove(DARK_MODE_CLASS);
+            }
+        }
+    </script>
+    {/if}
+
+    {#for script in scripts}
+        <script src="{script}" type="text/javascript"></script>
+    {/for}
+</head>
+<body class="min-h-screen bg-gray-100 text-gray-900 font-sans antialiased dark:bg-gray-950 dark:text-gray-100" data-page-id="{pageId}">
+    <script id="kc-context" type="application/json">{contextJson}</script>
+    <div id="kc-container" class="max-w-md mx-auto my-16 p-8 bg-white dark:bg-gray-900 rounded-lg shadow-md">
+        {#insert}Default page content{/insert}
+    </div>
+</body>
+</html>

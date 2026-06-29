@@ -1,0 +1,41 @@
+/**
+ * {{themeTitle}} — Alpine.js entry point for embedded HTML templates.
+ */
+import Alpine from "alpinejs";
+import { alertComponent } from "./components/alert.js";
+import { passwordFieldComponent } from "./components/password-field.js";
+import { loginPage } from "./pages/login.js";
+
+function getKeycloakContext() {
+  const script = document.getElementById("kc-context");
+  if (!script) {
+    throw new Error("Keycloak context not found");
+  }
+  return JSON.parse(script.textContent || "{}");
+}
+
+function initApp() {
+  const ctx = getKeycloakContext();
+
+  Alpine.store("ctx", ctx);
+
+  Alpine.magic("msg", () => (key, ...params) => {
+    let message = ctx.msg[key] || key;
+    params.forEach((param, index) => {
+      message = message.replace(new RegExp(`\\{${index}\\}`, "g"), String(param));
+    });
+    return message;
+  });
+
+  Alpine.data("kcAlert", alertComponent);
+  Alpine.data("kcPasswordField", passwordFieldComponent);
+  Alpine.data("loginPage", loginPage);
+
+  Alpine.start();
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initApp);
+} else {
+  initApp();
+}

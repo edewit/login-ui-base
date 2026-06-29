@@ -1,0 +1,25 @@
+<div class="mb-4">
+    <label for="username" class="block mb-1 font-semibold">
+        {#if !realmLoginWithEmailAllowed}
+            {msg.format('username')}
+        {#else if !realmRegistrationEmailAsUsername}
+            {msg.format('usernameOrEmail')}
+        {#else}
+            {msg.format('email')}
+        {/if}
+    </label>
+    <input id="username" name="username" type="text"
+           {#if value}value="{value}"{#else}value="{loginUsername}"{/if}
+           autocomplete="username"
+           {#if autofocus}autofocus{/if}
+           {#if tabindex}tabindex="{tabindex}"{/if}
+           aria-invalid="{#if hasError}{hasError}{#else}{#if errorSource == 'combined'}{hasUsernamePasswordError}{#else}{hasUsernameError}{/if}{/if}"
+           class="w-full px-3 py-2 border border-gray-300 rounded bg-white text-gray-900 dark:bg-gray-950 dark:border-gray-600 dark:text-gray-100" />
+    {#if hasError}
+    <span{#if errorId} id="{errorId}"{/if} class="mt-1 block text-sm text-red-600 dark:text-red-400"{#if errorLive} aria-live="polite"{/if}>{error}</span>
+    {#else if errorSource == 'combined' && hasUsernamePasswordError}
+    <span{#if errorId} id="{errorId}"{/if} class="mt-1 block text-sm text-red-600 dark:text-red-400"{#if errorLive} aria-live="polite"{/if}>{usernamePasswordError}</span>
+    {#else if hasUsernameError}
+    <span class="mt-1 block text-sm text-red-600 dark:text-red-400">{usernameFieldError}</span>
+    {/if}
+</div>

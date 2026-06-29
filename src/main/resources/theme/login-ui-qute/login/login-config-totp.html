@@ -1,0 +1,25 @@
+{#include template}
+<div id="kc-config-totp">
+    <h1 id="kc-page-title">{msg.format('loginTotpTitle')}</h1>
+    {#include alert /}
+
+    <p>{msg.format('loginTotpStep1')}</p>
+    {#if hasTotpSecret}
+    <p><strong>{totpSecretEncoded}</strong></p>
+    {/if}
+    {#if hasTotpQrUrl}
+    <p><a href="{totpQrUrl}">{msg.format('loginTotpScanBarcode')}</a></p>
+    {/if}
+
+    <form action="{url.loginAction}" method="post">
+        {#include form-field name='totp' id='totp' type='text' label=msg.format('authenticatorCode') hasError=hasTotpError error=totpFieldError autofocus=true autocomplete='off' /}
+        {#include form-field name='userLabel' id='userLabel' type='text' label=msg.format('loginTotpDeviceName') hasError=hasUserLabelError error=userLabelFieldError autocomplete='off' /}
+        {#include form-buttons}
+            {#include submit-button value=msg.format('doSubmit') /}
+            {#if isAppInitiatedAction}
+            {#include cancel-aia-button /}
+            {/if}
+        {/include}
+    </form>
+</div>
+{/include}

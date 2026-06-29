@@ -1,0 +1,12 @@
+.kc-login-container {
+  max-width: 28rem;
+  margin: 2rem auto;
+}
+
+.kc-social-providers {
+  margin-top: 1.5rem;
+}
+
+.kc-social-providers .pf-v5-c-button {
+  margin-bottom: 0.5rem;
+}

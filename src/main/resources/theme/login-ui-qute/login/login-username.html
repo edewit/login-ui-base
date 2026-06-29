@@ -1,0 +1,28 @@
+{#include template}
+<div id="kc-form">
+    <h1 id="kc-page-title">{msg.format('loginAccountTitle')}</h1>
+    {#include alert /}
+
+    {#if realmPassword}
+    <form id="kc-form-login" action="{url.loginAction}" method="post">
+        {#if !usernameHidden}
+        {#include username-field autofocus=true /}
+        {/if}
+
+        {#if realmRememberMe && !usernameHidden}
+        {#include checkbox-field name='rememberMe' id='rememberMe' label=msg.format('rememberMe') checked=rememberMeChecked /}
+        {/if}
+
+        {#include form-buttons}
+            {#include submit-button name='login' value=msg.format('doLogIn') /}
+        {/include}
+    </form>
+    {/if}
+
+    {#if showRegistrationLink}
+    <p>{msg.format('noAccount')} <a href="{url.registrationUrl}">{msg.format('doRegister')}</a></p>
+    {/if}
+
+    {#include social-providers /}
+</div>
+{/include}

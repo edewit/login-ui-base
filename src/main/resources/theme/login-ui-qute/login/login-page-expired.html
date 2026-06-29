@@ -1,0 +1,12 @@
+{#include template}
+<div id="kc-page-expired">
+    <h1 id="kc-page-title">{msg.format('pageExpiredTitle')}</h1>
+
+    <p class="mb-4 text-gray-600 dark:text-gray-300">
+        {msg.format('pageExpiredMsg1')}
+        <a id="loginRestartLink" href="{url.loginRestartFlowUrl}">{msg.format('doClickHere')}</a>.
+        {msg.format('pageExpiredMsg2')}
+        <a id="loginContinueLink" href="{url.loginAction}">{msg.format('doClickHere')}</a>.
+    </p>
+</div>
+{/include}

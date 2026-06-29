@@ -1,0 +1,24 @@
+{#include template}
+<div id="kc-oauth-grant">
+    <h1 id="kc-page-title">{msg.format('oauthGrantTitle', oauthClient)}</h1>
+    {#include alert /}
+
+    <p>{msg.format('oauthGrantRequest')}</p>
+    <ul>
+        {#for scope in oauthScopes}
+        <li>
+            {#if scope.parameter}
+            {msg.format(scope.text)}: <strong>{scope.parameter}</strong>
+            {#else}
+            {msg.format(scope.text)}
+            {/if}
+        </li>
+        {/for}
+    </ul>
+
+    <form action="{url.oauthAction}" method="post">
+        <input name="accept" type="submit" value="{msg.format('doYes')}" />
+        <input name="cancel" type="submit" value="{msg.format('doNo')}" />
+    </form>
+</div>
+{/include}

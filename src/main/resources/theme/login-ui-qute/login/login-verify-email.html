@@ -1,0 +1,33 @@
+{#include template}
+<div id="kc-verify-email">
+    <h1 id="kc-page-title">{msg.format('emailVerifyTitle')}</h1>
+    {#include alert /}
+
+    <p class="mb-4 text-gray-600 dark:text-gray-300">
+        {#if hasVerifyEmail}
+            {msg.format('emailVerifyInstruction1', verifyEmail)}
+        {#else}
+            {msg.format('emailVerifyInstruction4', userEmail)}
+        {/if}
+    </p>
+
+    {#if isAppInitiatedAction}
+    <form action="{url.loginAction}" method="post">
+        {#include form-buttons}
+            {#if hasVerifyEmail}
+            {#include submit-button value=msg.format('emailVerifyResend') /}
+            {#else}
+            {#include submit-button value=msg.format('emailVerifySend') /}
+            {/if}
+            {#include cancel-aia-button /}
+        {/include}
+    </form>
+    {#else}
+    <p class="mb-4 text-gray-600 dark:text-gray-300">
+        {msg.format('emailVerifyInstruction2')}
+        <a href="{url.loginAction}">{msg.format('doClickHere')}</a>
+        {msg.format('emailVerifyInstruction3')}
+    </p>
+    {/if}
+</div>
+{/include}

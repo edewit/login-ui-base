@@ -1,0 +1,13 @@
+{#include template}
+<div id="kc-oauth-device-verify">
+    <h1 id="kc-page-title">{msg.format('oauth2DeviceVerificationTitle')}</h1>
+    {#include alert /}
+
+    <form action="{url.oauth2DeviceVerificationAction}" method="post">
+        {#include form-field name='device_user_code' id='device-user-code' type='text' label=msg.format('verifyOAuth2DeviceUserCode') autofocus=true autocomplete='off' /}
+        {#include form-buttons}
+            {#include submit-button value=msg.format('doSubmit') /}
+        {/include}
+    </form>
+</div>
+{/include}

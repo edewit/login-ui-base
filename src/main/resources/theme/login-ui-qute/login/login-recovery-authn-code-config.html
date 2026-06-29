@@ -1,0 +1,26 @@
+{#include template}
+<div id="kc-recovery-codes-config">
+    <h1 id="kc-page-title">{msg.format('recovery-code-config-header')}</h1>
+    {#include alert /}
+
+    <p>{msg.format('recovery-code-config-warning-message')}</p>
+
+    {#if recoveryCodes}
+    <ol>
+        {#for code in recoveryCodes}
+        <li>{code}</li>
+        {/for}
+    </ol>
+    {/if}
+
+    <form action="{url.loginAction}" method="post">
+        <label>
+            <input type="checkbox" id="kc-recovery-codes-confirmation" name="recoveryCodesConfirmation" />
+            {msg.format('recovery-codes-confirmation-message')}
+        </label>
+        {#include form-buttons}
+            {#include submit-button value=msg.format('recovery-codes-action-complete') /}
+        {/include}
+    </form>
+</div>
+{/include}

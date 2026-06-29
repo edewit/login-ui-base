@@ -1,0 +1,18 @@
+{#include template}
+<div id="kc-webauthn-authenticate">
+    <h1 id="kc-page-title">{msg.format('webauthn-login-title')}</h1>
+    {#include alert /}
+
+    <form id="webauth" action="{url.loginAction}" method="post">
+        <input type="hidden" id="clientDataJSON" name="clientDataJSON" />
+        <input type="hidden" id="authenticatorData" name="authenticatorData" />
+        <input type="hidden" id="signature" name="signature" />
+        <input type="hidden" id="credentialId" name="credentialId" />
+        <input type="hidden" id="userHandle" name="userHandle" />
+        <input type="hidden" id="error" name="error" />
+    </form>
+
+    <p>{msg.format('webauthn-available-authenticators')}</p>
+    <script type="module" src="{url.resourcesPath}/js/webauthnAuthenticate.js"></script>
+</div>
+{/include}

@@ -1,0 +1,12 @@
+{
+  "themes": [
+    {
+      "name": "login-ui-base",
+      "types": ["login"]
+    },
+    {
+      "name": "login-ui-qute",
+      "types": ["login"]
+    }
+  ]
+}

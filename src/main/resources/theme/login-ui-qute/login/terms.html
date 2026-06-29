@@ -1,0 +1,12 @@
+{#include template}
+<div id="kc-terms">
+    <h1 id="kc-page-title">{msg.format('termsTitle')}</h1>
+
+    <div id="kc-terms-text">{msg.format('termsText')}</div>
+
+    <form action="{url.loginAction}" method="post">
+        <input name="accept" type="submit" value="{msg.format('doAccept')}" />
+        <input name="cancel" type="submit" value="{msg.format('doDecline')}" />
+    </form>
+</div>
+{/include}

@@ -1,0 +1,21 @@
+{#include template}
+<div id="kc-reset-otp">
+    <h1 id="kc-page-title">{msg.format('doLogIn')}</h1>
+    {#include alert /}
+
+    <p>{msg.format('otp-reset-description')}</p>
+
+    <form action="{url.loginAction}" method="post">
+        {#for credential in otpCredentialOptions}
+        <label>
+            <input type="radio" name="selectedCredentialId" value="{credential.id}"
+                   {#if credential.selected}checked{/if} />
+            {credential.userLabel}
+        </label>
+        {/for}
+        {#include form-buttons}
+            {#include submit-button value=msg.format('doSubmit') /}
+        {/include}
+    </form>
+</div>
+{/include}

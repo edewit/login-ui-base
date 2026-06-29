@@ -1,0 +1,97 @@
+/**
+ * {{themeTitle}} — minimal client-side login theme.
+ * Reads Keycloak context from #kc-context and renders pages into #kc-container.
+ */
+const ctx = JSON.parse(document.getElementById('kc-context').textContent);
+const container = document.getElementById('kc-container');
+
+const pages = {
+  'login': renderLogin,
+};
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function renderLogin(context) {
+  const { realm, url, login, message, messagesPerField } = context;
+  const usernameError = Boolean(messagesPerField?.username);
+  const passwordError = Boolean(messagesPerField?.password);
+  const usernameLabel = realm.loginWithEmailAllowed
+    ? (realm.registrationEmailAsUsername ? context.msg?.email : context.msg?.usernameOrEmail)
+    : context.msg?.username;
+
+  const messageHtml = message?.summary
+    ? `<div class="pf-v5-c-alert pf-m-inline pf-m-${escapeHtml(message.type)}" role="alert">
+         <p class="pf-v5-c-alert__title">${message.summary}</p>
+       </div>`
+    : '';
+
+  const usernameField = !context.usernameHidden
+    ? `<div class="pf-v5-c-form__group">
+         <label class="pf-v5-c-form__label" for="username">${escapeHtml(usernameLabel ?? 'Username')}</label>
+         <input class="pf-v5-c-form-control${usernameError ? ' pf-m-error' : ''}"
+                type="text" id="username" name="username"
+                value="${escapeHtml(login?.username ?? '')}"
+                autocomplete="username" autofocus />
+       </div>`
+    : '';
+
+  const rememberMe = realm.rememberMe && !context.usernameHidden
+    ? `<label><input type="checkbox" name="rememberMe" ${login?.rememberMe ? 'checked' : ''} /> ${escapeHtml(context.msg?.rememberMe ?? 'Remember me')}</label>`
+    : '';
+
+  const forgotPassword = realm.resetPasswordAllowed
+    ? `<a href="${escapeHtml(url.loginResetCredentialsUrl)}">${escapeHtml(context.msg?.doForgotPassword ?? 'Forgot password?')}</a>`
+    : '';
+
+  const registration = realm.registrationAllowed
+    ? `<div id="kc-registration">
+         <span>${escapeHtml(context.msg?.noAccount ?? 'No account?')}
+           <a href="${escapeHtml(url.registrationUrl)}">${escapeHtml(context.msg?.doRegister ?? 'Register')}</a>
+         </span>
+       </div>`
+    : '';
+
+  container.innerHTML = `
+    <div class="pf-v5-c-login">
+      <main class="pf-v5-c-login__main">
+        <h1 class="pf-v5-c-title pf-m-3xl">${escapeHtml(context.msg?.loginAccountTitle ?? 'Sign in')}</h1>
+        ${messageHtml}
+        <form class="pf-v5-c-form" action="${escapeHtml(url.loginAction)}" method="post">
+          ${usernameField}
+          <div class="pf-v5-c-form__group">
+            <label class="pf-v5-c-form__label" for="password">${escapeHtml(context.msg?.password ?? 'Password')}</label>
+            <input class="pf-v5-c-form-control${passwordError ? ' pf-m-error' : ''}"
+                   type="password" id="password" name="password"
+                   autocomplete="current-password" />
+          </div>
+          <div class="pf-v5-c-form__actions">
+            ${rememberMe}
+            ${forgotPassword}
+            <button class="pf-v5-c-button pf-m-primary" type="submit" name="login" id="kc-login">
+              ${escapeHtml(context.msg?.doLogIn ?? 'Sign in')}
+            </button>
+          </div>
+          <input type="hidden" id="id-hidden-input" name="credentialId" />
+        </form>
+        ${registration}
+      </main>
+    </div>`;
+}
+
+function renderFallback(context) {
+  container.innerHTML = `
+    <div class="pf-v5-c-login">
+      <main class="pf-v5-c-login__main">
+        <h1 class="pf-v5-c-title">Page not implemented</h1>
+        <p>Add a renderer for <code>${escapeHtml(context.pageId)}</code> in <code>resources/js/main.js</code>.</p>
+      </main>
+    </div>`;
+}
+
+(pages[ctx.pageId] ?? renderFallback)(ctx);

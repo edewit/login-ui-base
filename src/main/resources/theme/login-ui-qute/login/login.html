@@ -1,0 +1,44 @@
+{#include template}
+<div id="kc-form">
+    <div id="kc-form-wrapper">
+        <h1 id="kc-page-title" class="text-2xl font-bold mb-6">{msg.format('loginAccountTitle')}</h1>
+        {#include alert /}
+
+        {#if realmPassword}
+        <form id="kc-form-login" action="{url.loginAction}" method="post">
+            {#if !usernameHidden}
+            {#include username-field errorSource='combined' tabindex=1 autofocus=true errorId='input-error' errorLive=true /}
+            {/if}
+
+            {#include form-field name='password' type='password' label=msg.format('password') hasError=hasUsernamePasswordError tabindex=2 autocomplete='current-password' /}
+
+            <div id="kc-form-options" class="flex flex-wrap items-center justify-between gap-3 mb-2">
+                {#if realmRememberMe && !usernameHidden}
+                {#include checkbox-field name='rememberMe' id='rememberMe' label=msg.format('rememberMe') checked=rememberMeChecked tabindex=3 /}
+                {/if}
+                {#if realmResetPasswordAllowed}
+                <div>
+                    <a tabindex="5" href="{url.loginResetCredentialsUrl}" class="text-blue-600 hover:underline dark:text-blue-400">{msg.format('doForgotPassword')}</a>
+                </div>
+                {/if}
+            </div>
+
+            {#include form-buttons}
+                <input type="hidden" id="id-hidden-input" name="credentialId" />
+                {#include submit-button name='login' id='kc-login' value=msg.format('doLogIn') tabindex=4 /}
+            {/include}
+        </form>
+        {/if}
+
+        {#if showRegistrationLink}
+        <div id="kc-registration-container" class="mt-6 text-center text-sm">
+            <div id="kc-registration">
+                <span>{msg.format('noAccount')} <a tabindex="6" href="{url.registrationUrl}" class="text-blue-600 hover:underline dark:text-blue-400">{msg.format('doRegister')}</a></span>
+            </div>
+        </div>
+        {/if}
+
+        {#include social-providers /}
+    </div>
+</div>
+{/include}

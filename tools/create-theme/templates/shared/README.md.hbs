@@ -1,0 +1,57 @@
+# {{themeTitle}}
+
+{{description}}
+
+Child login theme for Keycloak, extending **login-ui-{{parentTheme}}**.
+
+## Prerequisites
+
+- Node.js 18+
+- Maven 3.8+
+- [`@edewit/login-ui-base`](https://www.npmjs.com/package/@edewit/login-ui-base) (installed via `npm install`)
+
+## Build
+
+```bash
+mvn clean package
+```
+
+Produces `target/{{artifactId}}-1.0.0-SNAPSHOT.jar`.
+
+## Local development
+
+```bash
+npm install
+{{buildStep}}npm run start-keycloak
+```
+
+This uses [`keycloak-runner`](https://www.npmjs.com/package/keycloak-runner) to:
+
+1. Mount `login-ui-base` from `@edewit/login-ui-base` (npm package JAR)
+2. Symlink this theme from `src/main/resources/theme/{{themeName}}/`
+3. Set `loginTheme` to `{{themeName}}` on the `master` realm
+4. Disable theme/template caching for live reload
+
+Edit files under `src/main/resources/theme/{{themeName}}/login/` and refresh the browser.
+
+Environment variables:
+
+| Variable | Purpose |
+|----------|---------|
+| `LOGIN_UI_BASE_JAR` | Override path to login-ui-base JAR |
+| `KEYCLOAK_VERSION` | Keycloak release tag for keycloak-runner `-v` |
+| `KEYCLOAK_URL` | Base URL (default `http://127.0.0.1:8080`) |
+
+## Deployment
+
+```bash
+cp target/{{artifactId}}-*.jar $KEYCLOAK_HOME/providers/
+cp node_modules/@edewit/login-ui-base/target/login-ui-base.jar $KEYCLOAK_HOME/providers/
+$KEYCLOAK_HOME/bin/kc.sh build
+```
+
+Or copy the login-ui-base JAR from your Maven local repository / npm package.
+
+## Usage
+
+Set **Login theme** to `{{themeName}}` in the realm settings (or use `npm run start-keycloak` which patches `master` automatically).

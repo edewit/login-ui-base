@@ -1,0 +1,11 @@
+{#include template}
+<div id="kc-idp-link-confirm-override">
+    <h1 id="kc-page-title">{msg.format('confirmOverrideIdpTitle')}</h1>
+    {#include alert /}
+
+    <form action="{url.loginAction}" method="post">
+        <button type="submit" name="submitAction" value="confirmOverride">{msg.format('confirmOverrideIdpContinue', idpDisplayName)}</button>
+        <button type="submit" name="submitAction" value="cancel">{msg.format('doCancel')}</button>
+    </form>
+</div>
+{/include}

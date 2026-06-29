@@ -1,0 +1,21 @@
+{#for field in profileFields}
+{#include form-field name=field.name id=field.name type='text' value=field.value autocomplete=field.autocomplete
+    hasError=field.hasError error=field.error required=field.required label=msg.format(field.displayName) /}
+{/for}
+
+{#if passwordRequired}
+{#include form-field name='password' id='password' type='password' label=msg.format('password') required=true
+    hasError=hasPasswordError error=passwordFieldError autocomplete='new-password' /}
+{#include form-field name='password-confirm' id='password-confirm' type='password' label=msg.format('passwordConfirm') required=true
+    hasError=hasPasswordConfirmError error=passwordConfirmFieldError autocomplete='new-password' /}
+{/if}
+
+{#if termsAcceptanceRequired}
+{#include checkbox-field name='termsAccepted' id='termsAccepted' label=msg.format('termsText') /}
+{/if}
+
+{#if recaptchaRequired && recaptchaVisible}
+<div class="mb-4">
+    <div class="g-recaptcha" data-size="compact"></div>
+</div>
+{/if}

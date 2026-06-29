@@ -1,0 +1,11 @@
+{#include template}
+<div id="kc-idp-link-confirm">
+    <h1 id="kc-page-title">{msg.format('confirmLinkIdpTitle')}</h1>
+    {#include alert /}
+
+    <form action="{url.loginAction}" method="post">
+        <button type="submit" name="submitAction" value="updateProfile">{msg.format('confirmLinkIdpReviewProfile')}</button>
+        <button type="submit" name="submitAction" value="linkAccount">{msg.format('confirmLinkIdpContinue', idpDisplayName)}</button>
+    </form>
+</div>
+{/include}

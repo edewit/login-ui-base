@@ -1,0 +1,9 @@
+<div class="{#if wrapperClass}{wrapperClass}{#else}mb-4{/if}">
+    <label{#if labelClass} class="{labelClass}"{#else} class="inline-flex items-center gap-2 cursor-pointer"{/if}>
+        <input {#if id}id="{id}"{#else}id="{name}"{/if} name="{name}" type="checkbox"
+               {#if checked}checked{/if}
+               {#if tabindex}tabindex="{tabindex}"{/if}
+               class="rounded border-gray-300 dark:border-gray-600" />
+        {label}
+    </label>
+</div>

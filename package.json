@@ -1,6 +1,6 @@
 {
   "name": "@edewit/login-ui-base",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Base theme for Keycloak login pages with client-side UI and optional Quarkus Qute server-side rendering.",
   "type": "module",
   "license": "Apache-2.0",

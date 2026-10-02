@@ -1,0 +1,9 @@
+**/node_modules/
+**/*.map
+test-results/
+workspace/
+.cursor/
+target/node/
+target/classes/
+target/test-classes/
+*.log

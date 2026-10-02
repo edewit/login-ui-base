@@ -1,0 +1,16 @@
+<div class="pb-stage" x-data="simplePage" x-init="init()">
+  <p class="pb-brand" x-text="ctx.realm.displayName || 'Peekaboo'"></p>
+  <p class="pb-tagline">Something went wrong</p>
+
+  <div class="pb-card">
+    <h1 class="pb-title" x-text="$msg('errorTitle')"></h1>
+
+    <template x-if="ctx.message?.summary">
+      <div class="pb-alert pb-alert--error" role="alert" x-html="ctx.message.summary"></div>
+    </template>
+
+    <p class="pb-footer">
+      <a :href="ctx.url.loginUrl" x-text="$msg('backToApplication') || $msg('doTryAgain')"></a>
+    </p>
+  </div>
+</div>

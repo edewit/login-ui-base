@@ -44,12 +44,17 @@ public final class LoginContextJsonBuilder {
         if (url instanceof UrlBean urlBean) {
             json.append(',');
             appendObjectStart(json, "url");
-            appendString(json, "loginAction", urlBean.getLoginAction());
+            if (urlBean.hasAction()) {
+                appendString(json, "loginAction", urlBean.getLoginAction());
+            } else {
+                appendString(json, "loginAction", "");
+            }
             appendString(json, "loginUrl", urlBean.getLoginUrl(), true);
             appendString(json, "registrationUrl", urlBean.getRegistrationUrl(), true);
             appendString(json, "loginResetCredentialsUrl", urlBean.getLoginResetCredentialsUrl(), true);
             appendString(json, "resourcesPath", urlBean.getResourcesPath(), true);
             appendString(json, "resourcesCommonPath", urlBean.getResourcesCommonPath(), true);
+            appendBoolean(json, "hasAction", urlBean.hasAction(), true);
             appendObjectEnd(json);
         }
 

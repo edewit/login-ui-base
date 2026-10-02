@@ -16,6 +16,7 @@ import org.keycloak.forms.login.freemarker.model.ProfileBean;
 import org.keycloak.forms.login.freemarker.model.SAMLPostFormBean;
 import org.keycloak.forms.login.freemarker.model.LoginBean;
 import org.keycloak.forms.login.freemarker.model.TotpLoginBean;
+import org.keycloak.forms.login.freemarker.model.UrlBean;
 import org.keycloak.forms.login.freemarker.model.X509ConfirmBean;
 import org.keycloak.theme.beans.MessagesPerFieldBean;
 
@@ -88,17 +89,33 @@ final class QuteTemplateDataSupport {
         data.put("showSocialProviders", readBoolean(realm, "password", true) && hasSocialProviders);
 
         Object url = data.get("url");
-        data.put("urlLoginAction", nullToEmpty(String.valueOf(readProperty(url, "loginAction", ""))));
-        data.put("urlLoginUrl", nullToEmpty(String.valueOf(readProperty(url, "loginUrl", ""))));
-        data.put("urlRegistrationUrl", nullToEmpty(String.valueOf(readProperty(url, "registrationUrl", ""))));
-        data.put("urlRegistrationAction", nullToEmpty(String.valueOf(readProperty(url, "registrationAction", ""))));
-        data.put("urlLoginResetCredentialsUrl", nullToEmpty(String.valueOf(readProperty(url, "loginResetCredentialsUrl", ""))));
-        data.put("urlLogoutConfirmAction", nullToEmpty(String.valueOf(readProperty(url, "logoutConfirmAction", ""))));
-        data.put("urlLoginRestartFlowUrl", nullToEmpty(String.valueOf(readProperty(url, "loginRestartFlowUrl", ""))));
-        data.put("urlOauthAction", nullToEmpty(String.valueOf(readProperty(url, "oauthAction", ""))));
-        data.put("urlOauth2DeviceVerificationAction", nullToEmpty(String.valueOf(readProperty(url, "oauth2DeviceVerificationAction", ""))));
-        data.put("urlResourcesPath", nullToEmpty(String.valueOf(readProperty(url, "resourcesPath", ""))));
-        data.put("urlResourcesCommonPath", nullToEmpty(String.valueOf(readProperty(url, "resourcesCommonPath", ""))));
+        if (url instanceof UrlBean urlBean) {
+            data.put("urlLoginAction", urlBean.hasAction() ? nullToEmpty(urlBean.getLoginAction()) : "");
+            data.put("urlLoginUrl", nullToEmpty(urlBean.getLoginUrl()));
+            data.put("urlRegistrationUrl", nullToEmpty(urlBean.getRegistrationUrl()));
+            data.put("urlRegistrationAction", nullToEmpty(urlBean.getRegistrationAction()));
+            data.put("urlLoginResetCredentialsUrl", nullToEmpty(urlBean.getLoginResetCredentialsUrl()));
+            data.put("urlLogoutConfirmAction", nullToEmpty(urlBean.getLogoutConfirmAction()));
+            data.put("urlLoginRestartFlowUrl", nullToEmpty(urlBean.getLoginRestartFlowUrl()));
+            data.put("urlOauthAction", nullToEmpty(urlBean.getOauthAction()));
+            data.put("urlOauth2DeviceVerificationAction", nullToEmpty(urlBean.getOauth2DeviceVerificationAction()));
+            data.put("urlResourcesPath", nullToEmpty(urlBean.getResourcesPath()));
+            data.put("urlResourcesCommonPath", nullToEmpty(urlBean.getResourcesCommonPath()));
+            data.put("urlHasAction", urlBean.hasAction());
+        } else {
+            data.put("urlLoginAction", nullToEmpty(String.valueOf(readProperty(url, "loginAction", ""))));
+            data.put("urlLoginUrl", nullToEmpty(String.valueOf(readProperty(url, "loginUrl", ""))));
+            data.put("urlRegistrationUrl", nullToEmpty(String.valueOf(readProperty(url, "registrationUrl", ""))));
+            data.put("urlRegistrationAction", nullToEmpty(String.valueOf(readProperty(url, "registrationAction", ""))));
+            data.put("urlLoginResetCredentialsUrl", nullToEmpty(String.valueOf(readProperty(url, "loginResetCredentialsUrl", ""))));
+            data.put("urlLogoutConfirmAction", nullToEmpty(String.valueOf(readProperty(url, "logoutConfirmAction", ""))));
+            data.put("urlLoginRestartFlowUrl", nullToEmpty(String.valueOf(readProperty(url, "loginRestartFlowUrl", ""))));
+            data.put("urlOauthAction", nullToEmpty(String.valueOf(readProperty(url, "oauthAction", ""))));
+            data.put("urlOauth2DeviceVerificationAction", nullToEmpty(String.valueOf(readProperty(url, "oauth2DeviceVerificationAction", ""))));
+            data.put("urlResourcesPath", nullToEmpty(String.valueOf(readProperty(url, "resourcesPath", ""))));
+            data.put("urlResourcesCommonPath", nullToEmpty(String.valueOf(readProperty(url, "resourcesCommonPath", ""))));
+            data.put("urlHasAction", false);
+        }
 
         data.put("isAppInitiatedAction", data.containsKey("isAppInitiatedAction"));
         data.put("verifyEmail", nullToEmpty((String) data.get("verifyEmail")));

@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en" class="peekaboo-bear">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>login-ui-base theme preview</title>
+    <style>
+      .preview-bar {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+        padding: 0.65rem 1rem;
+        background: rgba(8, 28, 21, 0.92);
+        border-bottom: 1px solid rgba(216, 243, 220, 0.15);
+        backdrop-filter: blur(8px);
+      }
+      .preview-bar span {
+        color: #d8f3dc;
+        font: 600 0.85rem/1 "Source Sans 3", system-ui, sans-serif;
+        margin-right: 0.5rem;
+      }
+      .preview-bar button {
+        font: 600 0.8rem/1 "Source Sans 3", system-ui, sans-serif;
+        padding: 0.4rem 0.75rem;
+        border-radius: 999px;
+        border: 1px solid rgba(216, 243, 220, 0.35);
+        background: transparent;
+        color: #d8f3dc;
+        cursor: pointer;
+      }
+      .preview-bar button.is-active {
+        background: #40916c;
+        border-color: #40916c;
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body class="kc-login-peekaboo-bear">
+    <nav class="preview-bar" aria-label="Page preview">
+      <span>Offline preview</span>
+      <div id="page-buttons"></div>
+    </nav>
+    <script id="kc-context" type="application/json">{}</script>
+    <div id="kc-container" class="kc-login-container"></div>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>

@@ -16,6 +16,11 @@ export const THEME_TYPE_CHOICES = [
     value: "embedded",
     description: "parent=login-ui-base, embeddedTemplates=true",
   },
+  {
+    name: "Peekaboo Bear — polished woodland starter (hide-on-password-focus)",
+    value: "peekaboo",
+    description: "Copy of examples/peekaboo-bear",
+  },
 ];
 
 export async function promptThemeName(defaultValue) {

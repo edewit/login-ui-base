@@ -10,3 +10,6 @@ node_modules/
 /.factorypath
 /.settings
 /.vscode
+test-results/
+workspace/
+.cursor/

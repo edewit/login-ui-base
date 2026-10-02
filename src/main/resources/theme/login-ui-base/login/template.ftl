@@ -125,9 +125,9 @@
             "identityFederationEnabled": ${(realm.identityFederationEnabled!false)?c}
         },
         
-        <#-- URL Context -->
+        <#-- URL Context — loginAction throws if action URI unset (e.g. error page) -->
         "url": {
-            "loginAction": "${(url.loginAction)!}",
+            "loginAction": <#if url.hasAction()>"${url.loginAction?json_string}"<#else>""</#if>,
             "loginUrl": "${(url.loginUrl)!}",
             "loginRestartFlowUrl": "${(url.loginRestartFlowUrl)!}",
             "ssoLoginInOtherTabsUrl": "${(url.ssoLoginInOtherTabsUrl)!}",
@@ -138,7 +138,8 @@
             "resourcesPath": "${(url.resourcesPath)!}",
             "resourcesCommonPath": "${(url.resourcesCommonPath)!}",
             "oauthAction": "${(url.oauthAction)!}",
-            "logoutConfirmAction": "${(url.logoutConfirmAction)!}"
+            "logoutConfirmAction": "${(url.logoutConfirmAction)!}",
+            "hasAction": ${url.hasAction()?c}
         },
         
         <#-- Client Context -->

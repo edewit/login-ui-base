@@ -1,0 +1,148 @@
+<div
+  class="pb-stage"
+  x-data="loginPage"
+  x-init="init()"
+>
+  <p class="pb-brand" x-text="ctx.realm.displayName || 'Peekaboo'"></p>
+  <p class="pb-tagline">Sign in — the bear keeps secrets</p>
+
+  <svg
+    class="pb-bear is-idle"
+    :class="{ 'is-hiding': passwordFocused }"
+    viewBox="0 0 200 180"
+    role="img"
+    aria-hidden="true"
+    data-testid="peekaboo-bear"
+  >
+    <!-- Ears -->
+    <ellipse class="pb-ear" cx="48" cy="52" rx="28" ry="26" />
+    <ellipse class="pb-ear-inner" cx="48" cy="54" rx="14" ry="13" />
+    <ellipse class="pb-ear" cx="152" cy="52" rx="28" ry="26" />
+    <ellipse class="pb-ear-inner" cx="152" cy="54" rx="14" ry="13" />
+
+    <!-- Head -->
+    <ellipse class="pb-head" cx="100" cy="95" rx="72" ry="68" />
+
+    <!-- Snout -->
+    <ellipse class="pb-snout" cx="100" cy="118" rx="36" ry="28" />
+    <ellipse class="pb-nose" cx="100" cy="108" rx="12" ry="9" />
+    <path d="M100 117 Q92 128 82 130" fill="none" stroke="#1a1f16" stroke-width="2.5" stroke-linecap="round" />
+    <path d="M100 117 Q108 128 118 130" fill="none" stroke="#1a1f16" stroke-width="2.5" stroke-linecap="round" />
+
+    <!-- Brows -->
+    <path class="pb-brow" d="M62 72 Q78 66 90 72" />
+    <path class="pb-brow" d="M110 72 Q122 66 138 72" />
+
+    <!-- Eyes -->
+    <ellipse class="pb-eye pb-eye--left" cx="76" cy="88" rx="9" ry="11" />
+    <ellipse class="pb-eye pb-eye--right" cx="124" cy="88" rx="9" ry="11" />
+    <circle fill="#fff" cx="73" cy="84" r="3" opacity="0.85" />
+    <circle fill="#fff" cx="121" cy="84" r="3" opacity="0.85" />
+
+    <!-- Paws (cover eyes when hiding) -->
+    <g class="pb-paw pb-paw--left">
+      <ellipse cx="76" cy="90" rx="26" ry="22" />
+      <ellipse cx="62" cy="98" rx="7" ry="9" fill="#5c4510" opacity="0.35" />
+      <ellipse cx="76" cy="102" rx="7" ry="9" fill="#5c4510" opacity="0.35" />
+      <ellipse cx="90" cy="98" rx="7" ry="9" fill="#5c4510" opacity="0.35" />
+    </g>
+    <g class="pb-paw pb-paw--right">
+      <ellipse cx="124" cy="90" rx="26" ry="22" />
+      <ellipse cx="110" cy="98" rx="7" ry="9" fill="#5c4510" opacity="0.35" />
+      <ellipse cx="124" cy="102" rx="7" ry="9" fill="#5c4510" opacity="0.35" />
+      <ellipse cx="138" cy="98" rx="7" ry="9" fill="#5c4510" opacity="0.35" />
+    </g>
+  </svg>
+
+  <div class="pb-card">
+    <h1 class="pb-title" x-text="$msg('loginAccountTitle')"></h1>
+
+    <template x-if="ctx.message?.summary && !usernameError && !passwordError">
+      <div
+        class="pb-alert"
+        :class="'pb-alert--' + (ctx.message.type || 'info')"
+        role="alert"
+        x-html="ctx.message.summary"
+      ></div>
+    </template>
+
+    <template x-if="ctx.realm.password">
+      <form :action="ctx.url.loginAction" method="post">
+        <template x-if="!ctx.usernameHidden">
+          <div class="pb-field">
+            <label class="pb-label" for="username" x-text="usernameLabel"></label>
+            <input
+              class="pb-input"
+              :class="{ 'is-error': usernameError || passwordError }"
+              type="text"
+              id="username"
+              name="username"
+              :value="ctx.login?.username || ''"
+              autocomplete="username"
+              autofocus
+              required
+            />
+            <template x-if="usernameError">
+              <p class="pb-helper" x-text="usernameError"></p>
+            </template>
+          </div>
+        </template>
+
+        <div class="pb-field">
+          <label class="pb-label" for="password" x-text="$msg('password')"></label>
+          <input
+            class="pb-input"
+            :class="{ 'is-error': ctx.usernameHidden && passwordError }"
+            type="password"
+            id="password"
+            name="password"
+            autocomplete="current-password"
+            :autofocus="ctx.usernameHidden"
+            required
+            @focus="passwordFocused = true"
+            @blur="passwordFocused = false"
+          />
+          <template x-if="ctx.usernameHidden && passwordError">
+            <p class="pb-helper" x-text="passwordError"></p>
+          </template>
+          <template x-if="ctx.realm.resetPasswordAllowed">
+            <p class="pb-helper pb-helper--muted">
+              <a :href="ctx.url.loginResetCredentialsUrl" x-text="$msg('doForgotPassword')"></a>
+            </p>
+          </template>
+        </div>
+
+        <template x-if="ctx.realm.rememberMe && !ctx.usernameHidden">
+          <label class="pb-check">
+            <input
+              type="checkbox"
+              id="rememberMe"
+              name="rememberMe"
+              :checked="ctx.login?.rememberMe === 'on'"
+            />
+            <span x-text="$msg('rememberMe')"></span>
+          </label>
+        </template>
+
+        <input type="hidden" name="credentialId" :value="ctx.auth?.selectedCredential || ''" />
+
+        <button class="pb-btn" type="submit" x-text="$msg('doLogIn')"></button>
+      </form>
+    </template>
+
+    <template x-if="showSocialProviders">
+      <div class="pb-social">
+        <template x-for="provider in ctx.social.providers" :key="provider.alias">
+          <a class="pb-btn pb-btn--ghost" :href="provider.loginUrl" x-text="provider.displayName"></a>
+        </template>
+      </div>
+    </template>
+
+    <template x-if="showRegisterLink">
+      <p class="pb-footer">
+        <span x-text="$msg('noAccount')"></span>
+        <a :href="ctx.url.registrationUrl" x-text="$msg('doRegister')"></a>
+      </p>
+    </template>
+  </div>
+</div>

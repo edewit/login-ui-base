@@ -1,0 +1,103 @@
+<div class="pb-stage" x-data="simplePage" x-init="init()">
+  <p class="pb-brand" x-text="ctx.realm.displayName || 'Peekaboo'"></p>
+  <p class="pb-tagline">Create your account</p>
+
+  <div class="pb-card">
+    <h1 class="pb-title" x-text="$msg('registerTitle')"></h1>
+
+    <template x-if="ctx.message?.summary">
+      <div
+        class="pb-alert"
+        :class="'pb-alert--' + (ctx.message.type || 'info')"
+        role="alert"
+        x-html="ctx.message.summary"
+      ></div>
+    </template>
+
+    <form :action="ctx.url.registrationAction" method="post">
+      <div class="pb-field">
+        <label class="pb-label" for="firstName" x-text="$msg('firstName')"></label>
+        <input
+          class="pb-input"
+          :class="{ 'is-error': fieldError('firstName') }"
+          type="text"
+          id="firstName"
+          name="firstName"
+          :value="ctx.register?.formData?.firstName || ''"
+          autocomplete="given-name"
+        />
+        <template x-if="fieldError('firstName')">
+          <p class="pb-helper" x-text="fieldError('firstName')"></p>
+        </template>
+      </div>
+
+      <div class="pb-field">
+        <label class="pb-label" for="lastName" x-text="$msg('lastName')"></label>
+        <input
+          class="pb-input"
+          :class="{ 'is-error': fieldError('lastName') }"
+          type="text"
+          id="lastName"
+          name="lastName"
+          :value="ctx.register?.formData?.lastName || ''"
+          autocomplete="family-name"
+        />
+        <template x-if="fieldError('lastName')">
+          <p class="pb-helper" x-text="fieldError('lastName')"></p>
+        </template>
+      </div>
+
+      <div class="pb-field">
+        <label class="pb-label" for="email" x-text="$msg('email')"></label>
+        <input
+          class="pb-input"
+          :class="{ 'is-error': fieldError('email') }"
+          type="email"
+          id="email"
+          name="email"
+          :value="ctx.register?.formData?.email || ''"
+          autocomplete="email"
+        />
+        <template x-if="fieldError('email')">
+          <p class="pb-helper" x-text="fieldError('email')"></p>
+        </template>
+      </div>
+
+      <div class="pb-field">
+        <label class="pb-label" for="password" x-text="$msg('password')"></label>
+        <input
+          class="pb-input"
+          :class="{ 'is-error': fieldError('password') }"
+          type="password"
+          id="password"
+          name="password"
+          autocomplete="new-password"
+        />
+        <template x-if="fieldError('password')">
+          <p class="pb-helper" x-text="fieldError('password')"></p>
+        </template>
+      </div>
+
+      <div class="pb-field">
+        <label class="pb-label" for="password-confirm" x-text="$msg('passwordConfirm')"></label>
+        <input
+          class="pb-input"
+          :class="{ 'is-error': fieldError('password-confirm') }"
+          type="password"
+          id="password-confirm"
+          name="password-confirm"
+          autocomplete="new-password"
+        />
+        <template x-if="fieldError('password-confirm')">
+          <p class="pb-helper" x-text="fieldError('password-confirm')"></p>
+        </template>
+      </div>
+
+      <button class="pb-btn" type="submit" x-text="$msg('doRegister')"></button>
+    </form>
+
+    <p class="pb-footer">
+      <a :href="ctx.url.loginUrl" x-text="$msg('backToLogin')"></a>
+    </p>
+  </div>
+</div>

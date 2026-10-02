@@ -1,6 +1,6 @@
 {
   "name": "@edewit/login-ui-base",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Base theme for Keycloak login pages with client-side UI and optional Quarkus Qute server-side rendering.",
   "type": "module",
   "license": "Apache-2.0",
@@ -9,14 +9,25 @@
   },
   "files": [
     "README.md",
+    "COMPATIBILITY.md",
     "lib/resolve-jar.mjs",
+    "lib/kc-context.mjs",
+    "lib/kc-context.d.ts",
+    "types",
     "target/login-ui-base.jar",
     "tools/create-theme",
+    "examples/peekaboo-bear",
     "src/main/resources/theme/login-ui-qute/login/login.html"
   ],
+  "types": "./types/kc-context.d.ts",
   "exports": {
     "./jar": "./target/login-ui-base.jar",
-    "./resolve-jar": "./lib/resolve-jar.mjs"
+    "./resolve-jar": "./lib/resolve-jar.mjs",
+    "./kc-context": {
+      "types": "./lib/kc-context.d.ts",
+      "import": "./lib/kc-context.mjs"
+    },
+    "./types": "./types/kc-context.d.ts"
   },
   "bin": {
     "create-login-theme": "./tools/create-theme/cli.mjs"
@@ -25,7 +36,11 @@
     "create-theme": "node tools/create-theme/cli.mjs",
     "start-keycloak": "node scripts/start-keycloak.mjs",
     "prepare-npm": "node scripts/prepare-npm-artifacts.mjs",
-    "prepublishOnly": "mvn -q clean package && node scripts/prepare-npm-artifacts.mjs"
+    "prepublishOnly": "mvn -q clean package && node scripts/prepare-npm-artifacts.mjs",
+    "preview-theme": "vite --config preview/vite.config.js",
+    "check:pages": "node scripts/check-page-coverage.mjs",
+    "test:e2e": "playwright test --config tests/e2e/playwright.config.js",
+    "test:unit": "node --test tests/unit/*.test.mjs"
   },
   "engines": {
     "node": ">=18"
@@ -36,7 +51,12 @@
     "keycloak-runner": "0.0.1-alpha.3"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.10.1",
+    "@playwright/test": "^1.51.0",
     "@tailwindcss/cli": "^4.1.0",
-    "tailwindcss": "^4.1.0"
+    "alpinejs": "^3.14.3",
+    "esbuild": "^0.24.0",
+    "tailwindcss": "^4.1.0",
+    "vite": "^6.2.0"
   }
 }

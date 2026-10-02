@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import { copyQuteLoginPage } from "./lib/copy-from-theme.mjs";
 import { promptConfirm, promptThemeName, promptThemeType } from "./lib/prompt.mjs";
 import { render } from "./lib/render.mjs";
+import { scaffoldPeekaboo } from "./lib/scaffold-peekaboo.mjs";
 import {
   assertSafeOutput,
   resolveOutputDir,
@@ -39,11 +40,15 @@ function toTitle(name) {
 }
 
 function pomTemplateFor(type) {
-  return type === "embedded" ? "embedded/pom.xml.hbs" : "shared/pom.xml.hbs";
+  return type === "embedded" || type === "peekaboo"
+    ? "embedded/pom.xml.hbs"
+    : "shared/pom.xml.hbs";
 }
 
 function packageTemplateFor(type) {
-  return type === "embedded" ? "embedded/package.json.hbs" : "shared/package.json.hbs";
+  return type === "embedded" || type === "peekaboo"
+    ? "embedded/package.json.hbs"
+    : "shared/package.json.hbs";
 }
 
 function writeEmbeddedSources(outputDir, values) {
@@ -130,63 +135,71 @@ async function createTheme(opts) {
     themeTitle,
     parentTheme,
     themeType: type,
-    buildStep: type === "embedded" ? "npm run build\n" : "",
+    buildStep:
+      type === "embedded" || type === "peekaboo" ? "npm run build\n" : "",
   };
-
-  const themeLoginDir = path.join(
-    outputDir,
-    "src/main/resources/theme",
-    name,
-    "login",
-  );
 
   console.log(`Creating ${type} theme at ${outputDir}`);
 
-  writeFile(
-    path.join(outputDir, "pom.xml"),
-    render(readTemplate(TEMPLATES, ...pomTemplateFor(type).split("/")), values),
-  );
-  writeFile(
-    path.join(outputDir, "package.json"),
-    render(readTemplate(TEMPLATES, ...packageTemplateFor(type).split("/")), values),
-  );
-  writeFile(
-    path.join(outputDir, "README.md"),
-    render(readTemplate(TEMPLATES, "shared", "README.md.hbs"), values),
-  );
-  writeFile(
-    path.join(outputDir, "scripts/start-keycloak.mjs"),
-    render(readTemplate(TEMPLATES, "shared", "start-keycloak.mjs.hbs"), values),
-  );
-  writeFile(
-    path.join(outputDir, "src/main/resources/META-INF/keycloak-themes.json"),
-    render(readTemplate(TEMPLATES, "shared", "keycloak-themes.json.hbs"), values),
-  );
-  writeFile(
-    path.join(themeLoginDir, "theme.properties"),
-    render(readTemplate(TEMPLATES, type, "theme.properties.hbs"), values),
-  );
-
-  if (type === "qute") {
-    copyQuteLoginPage(LOGIN_UI_BASE_ROOT, path.join(themeLoginDir, "login.html"));
-  } else if (type === "embedded") {
-    writeEmbeddedSources(outputDir, values);
+  if (type === "peekaboo") {
+    scaffoldPeekaboo(LOGIN_UI_BASE_ROOT, outputDir, values);
   } else {
+    const themeLoginDir = path.join(
+      outputDir,
+      "src/main/resources/theme",
+      name,
+      "login",
+    );
+
     writeFile(
-      path.join(themeLoginDir, "resources/js/main.js"),
-      render(readTemplate(TEMPLATES, "vanilla-js", "main.js.hbs"), values),
+      path.join(outputDir, "pom.xml"),
+      render(readTemplate(TEMPLATES, ...pomTemplateFor(type).split("/")), values),
     );
     writeFile(
-      path.join(themeLoginDir, "resources/css/styles.css"),
-      readTemplate(TEMPLATES, "vanilla-js", "styles.css"),
+      path.join(outputDir, "package.json"),
+      render(
+        readTemplate(TEMPLATES, ...packageTemplateFor(type).split("/")),
+        values,
+      ),
     );
+    writeFile(
+      path.join(outputDir, "README.md"),
+      render(readTemplate(TEMPLATES, "shared", "README.md.hbs"), values),
+    );
+    writeFile(
+      path.join(outputDir, "scripts/start-keycloak.mjs"),
+      render(readTemplate(TEMPLATES, "shared", "start-keycloak.mjs.hbs"), values),
+    );
+    writeFile(
+      path.join(outputDir, "src/main/resources/META-INF/keycloak-themes.json"),
+      render(readTemplate(TEMPLATES, "shared", "keycloak-themes.json.hbs"), values),
+    );
+    writeFile(
+      path.join(themeLoginDir, "theme.properties"),
+      render(readTemplate(TEMPLATES, type, "theme.properties.hbs"), values),
+    );
+
+    if (type === "qute") {
+      copyQuteLoginPage(LOGIN_UI_BASE_ROOT, path.join(themeLoginDir, "login.html"));
+    } else if (type === "embedded") {
+      writeEmbeddedSources(outputDir, values);
+    } else {
+      writeFile(
+        path.join(themeLoginDir, "resources/js/main.js"),
+        render(readTemplate(TEMPLATES, "vanilla-js", "main.js.hbs"), values),
+      );
+      writeFile(
+        path.join(themeLoginDir, "resources/css/styles.css"),
+        readTemplate(TEMPLATES, "vanilla-js", "styles.css"),
+      );
+    }
   }
 
   console.log("");
   console.log("Done! Next steps:");
   console.log(`  cd ${outputDir}`);
   console.log("  npm install");
-  if (type === "embedded") {
+  if (type === "embedded" || type === "peekaboo") {
     console.log("  npm run build    # bundle Alpine.js to resources/js/main.js");
   }
   console.log("  npm run start-keycloak");
@@ -200,7 +213,7 @@ program
   .option("-n, --name <name>", "Theme name (lowercase, hyphens allowed)")
   .option(
     "-t, --type <type>",
-    "Template type: qute, vanilla-js, or embedded",
+    "Template type: qute, vanilla-js, embedded, or peekaboo",
   )
   .option("-o, --output <dir>", "Output directory (default: ../<name>)")
   .option("--artifact-id <id>", "Maven artifact ID (default: keycloak-<name>)")

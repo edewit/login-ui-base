@@ -1,0 +1,97 @@
+#!/usr/bin/env node
+/**
+ * Start Keycloak with login-ui-base, peekaboo-bear mounted from src/, theme cache disabled.
+ */
+import { spawn } from "node:child_process";
+import fs from "node:fs";
+import { createRequire } from "node:module";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { resolveLoginUiBaseJar } from "@edewit/login-ui-base/resolve-jar";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const projectRoot = path.resolve(__dirname, "..");
+const require = createRequire(import.meta.url);
+const themeName = "peekaboo-bear";
+
+const THEME_DEV_ARGS = [
+  "--spi-theme-static-max-age=-1",
+  "--spi-theme-cache-themes=false",
+  "--spi-theme-cache-templates=false",
+];
+
+function resolveKeycloakRunner() {
+  const local = path.join(
+    projectRoot,
+    "node_modules",
+    ".bin",
+    process.platform === "win32" ? "keycloak-runner.cmd" : "keycloak-runner",
+  );
+  if (fs.existsSync(local)) return local;
+  return "keycloak-runner";
+}
+
+function resolveThemePreviewJar() {
+  let jarPath;
+  try {
+    ({ jarPath } = require("@edewit/theme-preview"));
+  } catch (error) {
+    throw new Error(
+      "Unable to resolve @edewit/theme-preview. Run `npm install` in this workspace.",
+      { cause: error },
+    );
+  }
+  if (!jarPath || !fs.existsSync(jarPath)) {
+    throw new Error(`Theme preview provider JAR not found: ${jarPath ?? "<unknown>"}`);
+  }
+  return jarPath;
+}
+
+const baseJar = resolveLoginUiBaseJar();
+const previewJar = resolveThemePreviewJar();
+const themePath = path.join(projectRoot, "src/main/resources/theme", themeName);
+if (!fs.existsSync(path.join(themePath, "login"))) {
+  throw new Error(`Theme login directory not found: ${themePath}/login`);
+}
+
+const keycloakVersion = process.env.KEYCLOAK_VERSION;
+const keycloakUrl = process.env.KEYCLOAK_URL ?? "http://127.0.0.1:8080";
+
+const args = [
+  "-p",
+  baseJar,
+  "-p",
+  previewJar,
+  "-t",
+  `${themeName}:${themePath}`,
+  "--realm",
+  "master",
+  "--patch",
+  JSON.stringify({ loginTheme: themeName }),
+  "--keycloak-url",
+  keycloakUrl,
+  "--",
+  ...THEME_DEV_ARGS,
+];
+
+if (keycloakVersion) {
+  args.unshift(keycloakVersion);
+  args.unshift("-v");
+}
+
+console.log(`Theme: ${themeName} (peekaboo)`);
+console.log(`Base provider: ${baseJar}`);
+console.log(`Theme preview provider: ${previewJar}`);
+console.log(`Theme path: ${themePath}`);
+console.log(`Keycloak URL: ${keycloakUrl}`);
+console.log(`Login: ${keycloakUrl}/realms/master/account`);
+console.log(`Theme preview: ${keycloakUrl}/realms/master/theme-preview/`);
+console.log("");
+
+const child = spawn(resolveKeycloakRunner(), args, {
+  cwd: projectRoot,
+  stdio: "inherit",
+  shell: process.platform === "win32",
+});
+
+child.on("exit", (code) => process.exit(code ?? 1));

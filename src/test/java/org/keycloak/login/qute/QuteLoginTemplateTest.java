@@ -1,11 +1,16 @@
 package org.keycloak.login.qute;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
+import org.junit.jupiter.api.Test;
 
 import io.quarkus.qute.Engine;
 import io.quarkus.qute.RawString;
@@ -28,49 +33,43 @@ class QuteLoginTemplateTest {
             {"components/social-provider.html", "social-provider"},
     };
 
-    public static void main(String[] args) throws Exception {
-        int failures = 0;
-        failures += assertTemplate("login.html", baseLoginData(), html ->
+    @Test
+    void loginTemplateRendersFormAndSocial() {
+        assertTemplate("login.html", baseLoginData(), html ->
                 html.contains("kc-form-login")
                         && html.contains("kc-form-buttons")
                         && html.contains("kc-social-providers")
                         && html.contains("mb-4")
                         && html.contains("</html>"));
-        failures += assertTemplate("register.html", registrationData(), html ->
+    }
+
+    @Test
+    void registerTemplateRendersForm() {
+        assertTemplate("register.html", registrationData(), html ->
                 html.contains("kc-register-form-inner")
                         && html.contains("kc-form-buttons")
                         && html.contains("</html>"));
-        failures += assertTemplate("login-update-password.html", appInitiatedActionData(), html ->
+    }
+
+    @Test
+    void updatePasswordTemplateRendersCancelAia() {
+        assertTemplate("login-update-password.html", appInitiatedActionData(), html ->
                 html.contains("kc-form-buttons")
                         && html.contains("cancel-aia")
                         && html.contains("password-new")
                         && html.contains("</html>"));
-        if (failures == 0) {
-            System.out.println("OK");
-        } else {
-            System.err.println("FAILURES: " + failures);
-            System.exit(1);
-        }
     }
 
-    private static int assertTemplate(String templateName, Map<String, Object> data,
+    private static void assertTemplate(String templateName, Map<String, Object> data,
             java.util.function.Predicate<String> assertion) {
         try {
             String html = render(templateName, data);
-            if (!assertion.test(html)) {
-                System.err.println("ASSERTION FAILED: " + templateName);
-                return 1;
-            }
+            assertTrue(assertion.test(html), "Assertion failed for " + templateName);
         } catch (TemplateException e) {
-            System.err.println("FAIL " + templateName + ": " + e.getMessage());
-            e.printStackTrace();
-            return 1;
+            fail("FAIL " + templateName + ": " + e.getMessage(), e);
         } catch (Exception e) {
-            System.err.println("FAIL " + templateName + ": " + e.getMessage());
-            e.printStackTrace();
-            return 1;
+            fail("FAIL " + templateName + ": " + e.getMessage(), e);
         }
-        return 0;
     }
 
     private static Map<String, Object> baseLoginData() {

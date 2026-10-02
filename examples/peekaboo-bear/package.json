@@ -1,0 +1,24 @@
+{
+  "name": "@keycloak/peekaboo-bear",
+  "version": "1.0.0-SNAPSHOT",
+  "private": true,
+  "type": "module",
+  "description": "Peekaboo bear Keycloak login theme — covers its eyes when you type your password",
+  "scripts": {
+    "build": "esbuild src/main.js --bundle --outfile=src/main/resources/theme/peekaboo-bear/login/resources/js/main.js --format=esm --minify",
+    "dev": "esbuild src/main.js --bundle --outfile=src/main/resources/theme/peekaboo-bear/login/resources/js/main.js --format=esm --watch --sourcemap",
+    "start-keycloak": "node scripts/start-keycloak.mjs"
+  },
+  "dependencies": {
+    "@edewit/login-ui-base": "file:../..",
+    "@edewit/theme-preview": "^0.0.1",
+    "alpinejs": "^3.14.3"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0",
+    "keycloak-runner": "0.0.1-alpha.3"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

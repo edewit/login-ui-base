@@ -10,9 +10,13 @@ export function validateThemeName(name) {
   }
 }
 
+const VALID_TYPES = new Set(["qute", "vanilla-js", "embedded", "peekaboo"]);
+
 export function validateType(type) {
-  if (type !== "qute" && type !== "vanilla-js" && type !== "embedded") {
-    throw new Error('Type must be "qute", "vanilla-js", or "embedded".');
+  if (!VALID_TYPES.has(type)) {
+    throw new Error(
+      'Type must be "qute", "vanilla-js", "embedded", or "peekaboo".',
+    );
   }
 }
 

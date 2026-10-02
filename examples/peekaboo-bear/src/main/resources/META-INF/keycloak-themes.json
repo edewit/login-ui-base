@@ -1,0 +1,8 @@
+{
+  "themes": [
+    {
+      "name": "peekaboo-bear",
+      "types": ["login"]
+    }
+  ]
+}
